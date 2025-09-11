@@ -4,6 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>שמש/צל למצוקים בקפריסין</title>
+  <!-- Social / Share Preview Meta -->
+  <meta name="description" content="Cyprus crags shade calculator – find sun and shade times for climbing sectors." />
+  <meta property="og:title" content="Cyprus Crags Shade Calculator" />
+  <meta property="og:description" content="Find when each Cyprus climbing crag is in sun or shade throughout the day." />
+  <meta property="og:type" content="website" />
+  <!-- Optionally set your canonical URL below -->
+  <!-- <meta property=\"og:url\" content=\"https://your-domain.example/\" /> -->
+  <meta property="og:site_name" content="Cyprus Crags Shade Calculator" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Cyprus Crags Shade Calculator" />
+  <meta name="twitter:description" content="Find when each Cyprus climbing crag is in sun or shade throughout the day." />
 
   <script src="https://unpkg.com/suncalc@1.9.0/suncalc.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" defer></script>
@@ -72,14 +83,14 @@
   @media (max-width:640px){ .brand{display:none} }
   /* Mobile: show full Pentadaktylos West names (wrap allowed) */
   @media (max-width:640px){
-    #sectorTabs.west-grid{grid-template-columns:repeat(2,1fr);}
-    #sectorTabs.west-grid .tab{white-space:normal;overflow:visible;text-overflow:unset;font-size:13px;line-height:1.15;padding:8px 6px;}
-    /* Hide west tabs on mobile, show dropdown instead */
-    #sectorTabs.west-grid.mobile-hidden{display:none}
-    #westMobileSelectWrap{display:block}
+    /* Multi ( >3 sectors ) crag: show dropdown instead of tabs */
+    #sectorTabs.multi-grid{grid-template-columns:repeat(2,1fr);}
+    #sectorTabs.multi-grid .tab{white-space:normal;overflow:visible;text-overflow:unset;font-size:13px;line-height:1.15;padding:8px 6px;}
+    #sectorTabs.multi-grid.mobile-hidden{display:none}
+    #mobileCragSelectWrap{display:block}
   }
   @media (min-width:641px){
-    #westMobileSelectWrap{display:none}
+    #mobileCragSelectWrap{display:none}
   }
   </style>
 </head>
@@ -147,8 +158,8 @@
 
     <div class="card chart-wrap">
       <div id="sectorTabs"></div>
-      <div id="westMobileSelectWrap" style="display:none;margin:4px 0 8px 0">
-        <select id="westMobileSelect" style="width:100%;padding:6px 8px;font-size:13px"></select>
+      <div id="mobileCragSelectWrap" style="display:none;margin:4px 0 8px 0">
+        <select id="mobileCragSelect" style="width:100%;padding:6px 8px;font-size:13px"></select>
       </div>
       <div class="meta" id="meta" style="display:none"></div>
       <div class="canvas-box"><canvas id="chart"></canvas></div>
@@ -590,8 +601,8 @@
       const hue = 30 + (hash % 300);
       sectorTabs.style.setProperty('--h', String(hue));
       // Mobile dropdown preparation for pentadaktylos-west
-      const westMobileSelect = document.getElementById('westMobileSelect');
-      if(westMobileSelect) westMobileSelect.innerHTML='';
+  const mobileCragSelect = document.getElementById('mobileCragSelect');
+  if(mobileCragSelect) mobileCragSelect.innerHTML='';
       items.forEach(({s,i}) => {
         const b = document.createElement('button');
         b.className = 'tab' + (i===CURRENT_SECTOR_INDEX?' active':'');
@@ -619,27 +630,22 @@
         });
         sectorTabs.appendChild(b);
         // Populate mobile select for west
-        if(key==='pentadaktylos-west' && westMobileSelect){
+        if(mobileCragSelect){
           const opt=document.createElement('option');
-          opt.value=String(i); opt.textContent=label; if(i===CURRENT_SECTOR_INDEX) opt.selected=true; westMobileSelect.appendChild(opt);
+          opt.value=String(i); opt.textContent=label; if(i===CURRENT_SECTOR_INDEX) opt.selected=true; mobileCragSelect.appendChild(opt);
         }
       });
-      // Pentadaktylos West: force 6 per row * 2 rows grid
-      if(key==='pentadaktylos-west'){
-        sectorTabs.classList.add('west-grid');
-      }
-      // If west on mobile -> hide tabs, show select
-      if(key==='pentadaktylos-west'){
-        const wrap = document.getElementById('westMobileSelectWrap');
+      // Multi-sector layout & mobile dropdown if more than 3 sectors
+      const isMulti = items.length > 3;
+      if(isMulti) sectorTabs.classList.add('multi-grid');
+      if(isMulti){
+        const wrap = document.getElementById('mobileCragSelectWrap');
         if(wrap){
           if(window.matchMedia('(max-width:640px)').matches){
             sectorTabs.classList.add('mobile-hidden');
             wrap.style.display='block';
-            const westMobileSelect = document.getElementById('westMobileSelect');
-            if(westMobileSelect){
-              westMobileSelect.onchange = e => {
-                CURRENT_SECTOR_INDEX = +e.target.value; calc();
-              };
+            if(mobileCragSelect){
+              mobileCragSelect.onchange = e => { CURRENT_SECTOR_INDEX = +e.target.value; calc(); };
             }
           } else {
             sectorTabs.classList.remove('mobile-hidden');
