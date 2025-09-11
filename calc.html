@@ -162,6 +162,10 @@
   let SECTORS = [];
   let LOAD_USED_FALLBACK = false;
   let LOAD_COUNT = 0;
+  // Grouping and selection state for crag -> sectors UI
+  let GROUPS = []; // [{ key, label, indices:[sectorIndex,...] }]
+  let CRAG_SEL_KEY = '';
+  let CURRENT_SECTOR_INDEX = -1;
   async function loadSectors(){
     let usedFallback = false;
     try{
@@ -384,11 +388,23 @@
       }catch(err){
         console.error('Failed to load sectors.json', err);
       }
-  sel.innerHTML = '';
-  const norm = s => (s.name||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[Εε]/g,'e');
-  const sorted = SECTORS.map((s,i)=>({s,i})).sort((a,b)=> norm(a.s).localeCompare(norm(b.s), 'en', {sensitivity:'base'}));
-  sorted.forEach(({s,i})=>{ const o=document.createElement('option'); o.value=i; o.textContent=s.name; sel.appendChild(o); });
-      if(SECTORS.length>0 && sel.value==='') sel.value = '0';
+      // Build crag groups and populate dropdown with unique crag names
+      buildGroups();
+      sel.innerHTML = '';
+      for(const g of GROUPS){
+        const o = document.createElement('option');
+        o.value = g.key;
+        o.textContent = g.label;
+        sel.appendChild(o);
+      }
+      if(GROUPS.length){
+        if(!CRAG_SEL_KEY) CRAG_SEL_KEY = GROUPS[0].key;
+        const g = GROUPS.find(x=>x.key===CRAG_SEL_KEY) || GROUPS[0];
+        sel.value = g.key;
+        if(CURRENT_SECTOR_INDEX < 0 || !g.indices.includes(CURRENT_SECTOR_INDEX)){
+          CURRENT_SECTOR_INDEX = g.indices[0];
+        }
+      }
       const now = new Date();
       dateInp.value = `${now.getFullYear()}-${d2(now.getMonth()+1)}-${d2(now.getDate())}`;
       setLangAttrs();
@@ -400,7 +416,18 @@
       // Initial render if we have sectors
       if(SECTORS.length){ calc(); } else { summary.textContent = 'No sectors loaded. Place sectors.json or use the Map editor to create one.'; }
     });
-    sel.addEventListener('change', calc);
+    sel.addEventListener('change', () => {
+      CRAG_SEL_KEY = sel.value;
+      const g = GROUPS.find(x=>x.key===CRAG_SEL_KEY);
+      if(g){
+        if(!g.indices.includes(CURRENT_SECTOR_INDEX)){
+          CURRENT_SECTOR_INDEX = g.indices[0];
+        }
+      } else {
+        CURRENT_SECTOR_INDEX = -1;
+      }
+      calc();
+    });
     dateInp.addEventListener('change', calc);
 
     function setView(view){
@@ -454,26 +481,61 @@
       const m = base.match(/[a-z0-9]+/);
       return m ? m[0] : base;
     }
+    function cragLabelFromName(name, key){
+      const raw = String(name||'').trim();
+      let token = raw.split(/[\-\s]/)[0] || '';
+      token = token.trim();
+      if(!token){
+        return key ? (key.charAt(0).toUpperCase()+key.slice(1)) : 'Crag';
+      }
+      if(/^[a-z]+$/.test(token)) return token.charAt(0).toUpperCase()+token.slice(1);
+      return token;
+    }
+    function buildGroups(){
+      const map = new Map(); // key -> { key, label, indices }
+      for(let i=0;i<SECTORS.length;i++){
+        const s = SECTORS[i];
+        const key = cragKey(s);
+        if(!map.has(key)){
+          map.set(key, { key, label: cragLabelFromName(s.name, key), indices: [i] });
+        } else {
+          map.get(key).indices.push(i);
+        }
+      }
+      GROUPS = Array.from(map.values())
+        .sort((a,b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase(), 'en', {sensitivity:'base'}));
+      if(!GROUPS.length){ CRAG_SEL_KEY=''; CURRENT_SECTOR_INDEX=-1; return; }
+      if(!GROUPS.some(g=>g.key===CRAG_SEL_KEY)){
+        CRAG_SEL_KEY = GROUPS[0].key;
+      }
+      const g = GROUPS.find(x=>x.key===CRAG_SEL_KEY) || GROUPS[0];
+      if(!g.indices.includes(CURRENT_SECTOR_INDEX)){
+        CURRENT_SECTOR_INDEX = g.indices[0];
+      }
+    }
     function renderSectorTabs(){
       const norm = s => (s.name||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[Εε]/g,'e');
       sectorTabs.innerHTML = '';
-      if(!SECTORS.length || sel.value==='') return;
-      const selIdx = +sel.value;
-      const selected = SECTORS[selIdx];
-      const key = cragKey(selected);
-      // Keep only sectors that share the same first ASCII word (crag) as the selected
-      let same = SECTORS.map((s,i)=>({s,i})).filter(({s}) => cragKey(s) === key);
-      if(!same.length) same = [{s:selected, i:selIdx}];
-      same.sort((a,b)=> norm(a.s).localeCompare(norm(b.s), 'en', {sensitivity:'base'}));
+      if(!SECTORS.length || !CRAG_SEL_KEY){ return; }
+      const group = GROUPS.find(g=>g.key===CRAG_SEL_KEY) || GROUPS[0];
+      if(!group){ return; }
+      const key = group.key;
+      let items = group.indices.map(i => ({ s: SECTORS[i], i }));
+      if(!items.length){ return; }
+      items.sort((a,b)=> norm(a.s).localeCompare(norm(b.s), 'en', {sensitivity:'base'}));
       // Hue derived from crag key for stable tint
       let hash=0; for(let i=0;i<key.length;i++){ hash = (hash*31 + key.charCodeAt(i))>>>0; }
       const hue = 30 + (hash % 300);
       sectorTabs.style.setProperty('--h', String(hue));
-      same.forEach(({s,i}) => {
+      items.forEach(({s,i}) => {
         const b = document.createElement('button');
-        b.className = 'tab' + (i===selIdx?' active':'');
+        b.className = 'tab' + (i===CURRENT_SECTOR_INDEX?' active':'');
         b.textContent = s.name;
-        b.addEventListener('click', () => { sel.value = i; calc(); });
+        b.addEventListener('click', () => {
+          CURRENT_SECTOR_INDEX = i;
+          if(sel.value !== key) sel.value = key; // keep dropdown synced
+          calc();
+        });
         sectorTabs.appendChild(b);
       });
     }
@@ -515,13 +577,19 @@
 
     // ---------- חישוב (חשיפה מדורגת שמגיעה ל-100%) ----------
     function calc(){
-      if(!SECTORS.length || sel.value===''){
+      if(!SECTORS.length || CURRENT_SECTOR_INDEX<0){
         if(chart) { chart.destroy(); chart = null; }
         sectorTabs.innerHTML = '';
         summary.textContent = 'No sectors loaded.';
         return;
       }
-      const s = SECTORS[+sel.value];
+      if(CRAG_SEL_KEY){
+        const g = GROUPS.find(x=>x.key===CRAG_SEL_KEY);
+        if(g && !g.indices.includes(CURRENT_SECTOR_INDEX)){
+          CURRENT_SECTOR_INDEX = g.indices[0];
+        }
+      }
+      const s = SECTORS[CURRENT_SECTOR_INDEX];
       renderSectorTabs();
       const dateStr = dateInp.value;
 
