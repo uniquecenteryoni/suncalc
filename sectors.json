@@ -2,7 +2,7 @@
   "sectors": [
     {
       "id": "episkopi-main",
-      "name": "Εpiskopi-main",
+  "name": "Εpiskopi-main",
       "edge": {
         "p1": {
           "lat": 34.79404109798569,
@@ -22,7 +22,7 @@
     },
     {
       "id": "Episkopi-face",
-      "name": "Εpiskopi-face",
+  "name": "Εpiskopi-face",
       "edge": {
         "p1": {
           "lat": 34.7937292884894,
@@ -42,7 +42,7 @@
     },
     {
       "id": "gerakopetra main",
-      "name": "Gerakopetra main",
+  "name": "Gerakopetra main",
       "edge": {
         "p1": {
           "lat": 34.96540123799258,
@@ -62,7 +62,7 @@
     },
     {
       "id": "gerakopetra slab",
-      "name": "Gerakopetra slab",
+  "name": "Gerakopetra slab",
       "edge": {
         "p1": {
           "lat": 34.965920959683054,
@@ -82,7 +82,7 @@
     },
     {
       "id": "alikou - main",
-      "name": "Alikou - main",
+  "name": "Alikou - main",
       "edge": {
         "p1": {
           "lat": 34.95714677646421,
@@ -101,7 +101,7 @@
     },
     {
       "id": "alikou Slab",
-      "name": "Alikou Slab",
+  "name": "Alikou slab",
       "edge": {
         "p1": {
           "lat": 34.95631142313296,
@@ -121,7 +121,7 @@
     },
     {
       "id": "episkopi (SW)",
-      "name": "Episkopi (SW)",
+  "name": "Episkopi (sw)",
       "edge": {
         "p1": {
           "lat": 34.79441793348591,
@@ -141,15 +141,15 @@
     },
     {
       "id": "droushia (NW)",
-      "name": "Droushia (NW)",
+  "name": "Droushia (nw)",
       "edge": {
         "p1": {
-          "lat": 34.97177773743691,
-          "lon": 32.39514740659633
+          "lat": 34.97172229136924,
+          "lon": 32.39510229739739
         },
         "p2": {
-          "lat": 34.971888629459656,
-          "lon": 32.39521507039469
+          "lat": 34.971802544580974,
+          "lon": 32.39515587687493
         }
       },
       "face_side": "left",
@@ -161,15 +161,15 @@
     },
     {
       "id": "droushia (N)",
-      "name": "Droushia (N)",
+  "name": "Droushia (n)",
       "edge": {
         "p1": {
-          "lat": 34.971892325857816,
-          "lon": 32.395233114074244
+          "lat": 34.97187384386529,
+          "lon": 32.395197026715145
         },
         "p2": {
-          "lat": 34.97190341505135,
-          "lon": 32.395422572709705
+          "lat": 34.971925593433866,
+          "lon": 32.39535039799142
         }
       },
       "face_side": "left",
@@ -181,7 +181,7 @@
     },
     {
       "id": "galataria",
-      "name": "Galataria",
+  "name": "Galataria",
       "edge": {
         "p1": {
           "lat": 34.859260244863975,
@@ -201,7 +201,7 @@
     },
     {
       "id": "diarizous Main Slab",
-      "name": "Diarizous Main Slab",
+  "name": "Darizous main slab",
       "edge": {
         "p1": {
           "lat": 34.79635504820295,
@@ -228,7 +228,7 @@
     },
     {
       "id": "diarizous Main Wall",
-      "name": "Diarizous Main Wall",
+  "name": "Main wall",
       "edge": {
         "p1": {
           "lat": 34.796339367689576,
@@ -240,7 +240,7 @@
         }
       },
       "face_side": "left",
-      "tilt_from_vertical_deg": 20,
+      "tilt_from_vertical_deg": 15,
       "horizon_alt_deg": 0,
       "obstacles": [],
       "min_alt_deg": 3,
@@ -248,7 +248,7 @@
     },
     {
       "id": "diarizous Picnic area",
-      "name": "Diarizous Picnic area",
+  "name": "Picnic area",
       "edge": {
         "p1": {
           "lat": 34.79579199236568,
@@ -268,7 +268,7 @@
     },
     {
       "id": "diarizous Road (S)",
-      "name": "Diarizous Road (S)",
+  "name": "Road (s)",
       "edge": {
         "p1": {
           "lat": 34.79612908546701,
@@ -288,7 +288,7 @@
     },
     {
       "id": "diarizous Corner",
-      "name": "Diarizous  Corner",
+  "name": "Corner",
       "edge": {
         "p1": {
           "lat": 34.796255031986405,
@@ -297,6 +297,366 @@
         "p2": {
           "lat": 34.79632911808439,
           "lon": 32.70244029142253
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": 0,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "gerakopetra konefti",
+  "name": "Konefti",
+      "edge": {
+        "p1": {
+          "lat": 34.9661701017629,
+          "lon": 32.37215073699114
+        },
+        "p2": {
+          "lat": 34.966584126221676,
+          "lon": 32.37243492494431
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": 0,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "gerakopetra thermobilies",
+  "name": "Thermobilies",
+      "edge": {
+        "p1": {
+          "lat": 34.96457313068045,
+          "lon": 32.370711753545855
+        },
+        "p2": {
+          "lat": 34.96473948328719,
+          "lon": 32.370810993783486
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": 0,
+      "horizon_alt_deg": 20,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "gerakopetra misos Tholos",
+  "name": "Misos tholos",
+      "edge": {
+        "p1": {
+          "lat": 34.965730198482994,
+          "lon": 32.3679375378128
+        },
+        "p2": {
+          "lat": 34.96572280513039,
+          "lon": 32.3680412889703
+        }
+      },
+      "face_side": "right",
+      "tilt_from_vertical_deg": 0,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "pentadaktylos west canyon (e)",
+  "name": "Pentadaktylos west - canyon (e)",
+      "edge": {
+        "p1": {
+          "lat": 35.31474874314412,
+          "lon": 33.13847243785859
+        },
+        "p2": {
+          "lat": 35.31548850432411,
+          "lon": 33.13863873481751
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": 0,
+      "horizon_alt_deg": 20,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "pentadaktylos west canyon (w)",
+  "name": "Pentadaktylos west - canyon (w)",
+      "edge": {
+        "p1": {
+          "lat": 35.31506378765382,
+          "lon": 33.13821319658897
+        },
+        "p2": {
+          "lat": 35.31558646607346,
+          "lon": 33.13834401326582
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": 0,
+      "horizon_alt_deg": 20,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "pentadaktylos west overlook",
+  "name": "Pentadaktylos west - overlook",
+      "edge": {
+        "p1": {
+          "lat": 35.31563063592597,
+          "lon": 33.13168138458658
+        },
+        "p2": {
+          "lat": 35.31506378765382,
+          "lon": 33.13219562945415
+        }
+      },
+      "face_side": "right",
+      "tilt_from_vertical_deg": 0,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "pentadaktylos west lapithou main",
+  "name": "Pentadaktylos west - lapithou main",
+      "edge": {
+        "p1": {
+          "lat": 35.31546144365321,
+          "lon": 33.143164225723645
+        },
+        "p2": {
+          "lat": 35.31528811255592,
+          "lon": 33.14434770922984
+        }
+      },
+      "face_side": "right",
+      "tilt_from_vertical_deg": -20,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "pentadaktylos west red balcony",
+  "name": "Pentadaktylos west - red balcony",
+      "edge": {
+        "p1": {
+          "lat": 35.31706430439706,
+          "lon": 33.13121974468232
+        },
+        "p2": {
+          "lat": 35.31691155115485,
+          "lon": 33.13196106161983
+        }
+      },
+      "face_side": "right",
+      "tilt_from_vertical_deg": -20,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "pentadaktylos west tufa ledge",
+  "name": "Pentadaktylos west - tufa ledge",
+      "edge": {
+        "p1": {
+          "lat": 35.317561173948164,
+          "lon": 33.12771221308431
+        },
+        "p2": {
+          "lat": 35.31696776285643,
+          "lon": 33.12838842991772
+        }
+      },
+      "face_side": "right",
+      "tilt_from_vertical_deg": -20,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "pentadaktylos west ancient wall",
+  "name": "Pentadaktylos west - ancient wall",
+      "edge": {
+        "p1": {
+          "lat": 35.31795688073249,
+          "lon": 33.12769824232268
+        },
+        "p2": {
+          "lat": 35.31840592661336,
+          "lon": 33.12741856528943
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": 0,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "pentadaktylos west trouli",
+  "name": "Pentadaktylos west - trouli",
+      "edge": {
+        "p1": {
+          "lat": 35.3208404725099,
+          "lon": 33.12003778996539
+        },
+        "p2": {
+          "lat": 35.320754182767494,
+          "lon": 33.118865489959724
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": 0,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "pentadaktylos west goat house",
+  "name": "Pentadaktylos west - goat house",
+      "edge": {
+        "p1": {
+          "lat": 35.32127681675367,
+          "lon": 33.11619990752006
+        },
+        "p2": {
+          "lat": 35.320886676129476,
+          "lon": 33.11477445683445
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": -15,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "pentadaktylos west vertical vista",
+  "name": "Pentadaktylos west - vertical vista",
+      "edge": {
+        "p1": {
+          "lat": 35.32858608456026,
+          "lon": 33.13020180286228
+        },
+        "p2": {
+          "lat": 35.328286614556525,
+          "lon": 33.131343126297004
+        }
+      },
+      "face_side": "right",
+      "tilt_from_vertical_deg": 0,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "pentadaktylos west cathedral",
+  "name": "Pentadaktylos west - cathedral",
+      "edge": {
+        "p1": {
+          "lat": 35.33854211214592,
+          "lon": 33.12170979395765
+        },
+        "p2": {
+          "lat": 35.339272366307114,
+          "lon": 33.12255947442364
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": -15,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "pentadaktylos west delta",
+  "name": "Pentadaktylos west - delta",
+      "edge": {
+        "p1": {
+          "lat": 35.33879617771226,
+          "lon": 33.124975448730176
+        },
+        "p2": {
+          "lat": 35.33933738921197,
+          "lon": 33.12544114522865
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": 15,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "pentadaktylos central buffa wall",
+  "name": "Pentadaktylos central - buffa wall",
+      "edge": {
+        "p1": {
+          "lat": 35.29723548683041,
+          "lon": 33.401957660785826
+        },
+        "p2": {
+          "lat": 35.297692011017745,
+          "lon": 33.40161483087413
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": 0,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "pentadaktylos central garga suyu",
+  "name": "Pentadaktylos central - garga suyu",
+      "edge": {
+        "p1": {
+          "lat": 35.28965459993714,
+          "lon": 33.44926367768452
+        },
+        "p2": {
+          "lat": 35.28962514391662,
+          "lon": 33.45072972664914
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": 0,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "pentadaktylos central bird crag",
+  "name": "Pentadaktylos central - bird crag",
+      "edge": {
+        "p1": {
+          "lat": 35.36742994698245,
+          "lon": 33.000504970550544
+        },
+        "p2": {
+          "lat": 35.36735995571987,
+          "lon": 33.001470565795906
         }
       },
       "face_side": "left",

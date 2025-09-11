@@ -20,7 +20,7 @@
       font-family:'Inter', system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
       display:flex;flex-direction:column;align-items:stretch;padding:0;overflow:hidden;
     }
-    .app{width:min(1000px,100%);height:calc(100dvh - var(--headerH, 0px));display:grid;grid-template-rows:auto 1fr auto;gap:8px;margin:8px auto;padding:0 10px;min-height:0}
+  .app{width:75%;max-width:1200px;height:calc(100dvh - var(--headerH, 0px));display:grid;grid-template-rows:auto 1fr auto;gap:8px;margin:8px auto;padding:0 10px;min-height:0}
     .card{background:#ffffff;border:1px solid rgba(229,231,235,0.7);border-radius:0;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
     .topbar{display:flex;align-items:center;justify-content:space-between}
     .site-topbar{position:sticky;top:0;z-index:20;width:100%;border-left:none;border-right:none;background:#ffffff}
@@ -47,10 +47,16 @@
   .chart-wrap{height:100%;display:flex;flex-direction:column;min-height:0}
   .canvas-box{flex:1;min-height:0;max-height:none}
     canvas{width:100% !important;height:100% !important;background:transparent;border:none;border-radius:0;padding:0}
-    #sectorTabs{display:flex;gap:12px;flex-wrap:nowrap;margin-bottom:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;border-bottom:1px solid rgba(229,231,235,0.8);padding-bottom:6px}
+  #sectorTabs{display:flex;gap:4px;flex-wrap:nowrap;margin-bottom:8px;overflow:hidden;border-bottom:1px solid rgba(229,231,235,0.8);padding-bottom:4px}
+  #sectorTabs.two-lines{flex-wrap:wrap;overflow:visible}
   /* Per-crag tint via CSS var set in JS */
   #sectorTabs{ --h: 210; --tint: hsl(var(--h) 100% 96% / 0.9); --line: hsl(var(--h) 85% 42%); background: var(--tint); padding:6px 8px; border-radius:0 }
-  #sectorTabs .tab{border:none;background:transparent;padding:8px 10px;cursor:pointer;border-bottom:2px solid transparent;color:#374151}
+  #sectorTabs .tab{border:none;background:transparent;padding:6px 8px;cursor:pointer;border-bottom:2px solid transparent;color:#374151;flex:1 1 0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px}
+  #sectorTabs.two-lines .tab{flex:1 1 calc(50% - 6px);white-space:nowrap}
+  /* West Pentadaktylos specific grid: 2 rows, 6 columns */
+  #sectorTabs.west-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;overflow:hidden}
+  #sectorTabs.west-grid .tab{width:100%;flex:initial;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  @media (min-width:700px){ #sectorTabs .tab{font-size:13px;padding:7px 9px} }
   #sectorTabs .tab:hover{border-bottom-color:var(--line);color:#111827}
   #sectorTabs .tab.active{border-bottom-color:var(--line);color:#111827;font-weight:600}
     .foot{font-size:12px;color:var(--muted)}
@@ -60,7 +66,10 @@
     .feedback-title{margin:0 0 8px 0;font-size:16px}
     .feedback-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
     .feedback-grid textarea{grid-column:1 / -1;min-height:90px;resize:vertical}
-    @media (max-width:860px){ .controls{grid-template-columns:1fr; grid-auto-rows:auto} }
+  @media (max-width:1024px){ .app{width:90%;} }
+  @media (max-width:860px){ .app{width:100%;} .controls{grid-template-columns:1fr; grid-auto-rows:auto} }
+  /* Hide big title block on phones so UI starts directly with crag selection */
+  @media (max-width:640px){ .brand{display:none} }
   </style>
 </head>
 <body>
@@ -101,8 +110,7 @@
           <input id="dateInp" type="date" />
         </div>
       </div>
-  <div id="dataStatus" class="foot" style="margin-top:6px;font-size:12px;color:#6b7280"></div>
-  <div id="dataStatus" class="foot" style="margin-top:6px;font-size:12px;color:#6b7280"></div>
+  <!-- Removed loaded-sectors status line per request -->
     </div>
 
     <div class="card chart-wrap">
@@ -298,7 +306,7 @@
       en: {
         title: 'Sun/Shade for Cyprus Crags',
         subtitle: 'A handy tool for climbers',
-        labels: { language: 'Language', sector: 'Sector', date: 'Date' },
+  labels: { language: 'Language', sector: 'Crag', date: 'Date' },
         chartTitle: 'Sun exposure (%) over time',
         sun: 'Sun', shade: 'Shade',
         axes: { xTitle: 'Time', yTitle: 'Exposure' },
@@ -312,7 +320,7 @@
       el: {
         title: 'Ήλιος/Σκιά για αναρριχητικά πεδία στην Κύπρο',
         subtitle: 'Ένα χρήσιμο εργαλείο για αναρριχητές',
-        labels: { language: 'Γλώσσα', sector: 'Τομέας', date: 'Ημερομηνία' },
+  labels: { language: 'Γλώσσα', sector: 'Βράχος', date: 'Ημερομηνία' },
         chartTitle: 'Ποσοστό έκθεσης στον ήλιο (%) לאורך זמן',
         sun: 'Ήλιος', shade: 'Σκιά',
         axes: { xTitle: 'Ώρα', yTitle: 'Έκθεση' },
@@ -326,7 +334,7 @@
       ru: {
         title: 'Солнце/Тень для скал на Кипре',
         subtitle: 'Полезный инструмент для скалолазов',
-        labels: { language: 'Язык', sector: 'Сектор', date: 'Дата' },
+  labels: { language: 'Язык', sector: 'Скала', date: 'Дата' },
         chartTitle: 'Доля освещения солнцем (%) во времени',
         sun: 'Солнце', shade: 'Тень',
         axes: { xTitle: 'Время', yTitle: 'Экспозиция' },
@@ -340,7 +348,7 @@
       he: {
         title: 'שמש/צל למצוקים בקפריסין',
         subtitle: 'כלי שימושי למטפסים',
-        labels: { language: 'שפה', sector: 'סקטור', date: 'תאריך' },
+  labels: { language: 'שפה', sector: 'מצוק', date: 'תאריך' },
         chartTitle: 'חשיפה לשמש (%) לאורך זמן',
         sun: 'שמש', shade: 'צל',
         axes: { xTitle: 'שעה', yTitle: 'חשיפה' },
@@ -411,8 +419,7 @@
       applyTexts();
       setLangUI();
   // Show where sectors came from
-      const ds = document.getElementById('dataStatus');
-  if(ds){ ds.textContent = LOAD_USED_FALLBACK ? 'Using built-in defaults (sectors.json not loaded).' : `Loaded ${LOAD_COUNT} sectors from sectors.json`; }
+  // Removed dataStatus line per request (no sector count display)
       // Initial render if we have sectors
       if(SECTORS.length){ calc(); } else { summary.textContent = 'No sectors loaded. Place sectors.json or use the Map editor to create one.'; }
     });
@@ -476,8 +483,9 @@
         .replace(/[\u0300-\u036f]/g,'');
     }
     function cragKey(s){
-      // Prefer id (ASCII), fallback to name. Extract first ASCII word to group variants consistently.
       const base = (s.id || s.name || '').toLowerCase();
+      if(base.startsWith('pentadaktylos west')) return 'pentadaktylos-west';
+      if(base.startsWith('pentadaktylos central')) return 'pentadaktylos-central';
       const m = base.match(/[a-z0-9]+/);
       return m ? m[0] : base;
     }
@@ -485,6 +493,8 @@
       const raw = String(name||'').trim();
       let token = raw.split(/[\-\s]/)[0] || '';
       token = token.trim();
+  if(key==='pentadaktylos-west') return 'Pentadaktylos West';
+  if(key==='pentadaktylos-central') return 'Pentadaktylos Central';
       if(!token){
         return key ? (key.charAt(0).toUpperCase()+key.slice(1)) : 'Crag';
       }
@@ -520,9 +530,26 @@
       const group = GROUPS.find(g=>g.key===CRAG_SEL_KEY) || GROUPS[0];
       if(!group){ return; }
       const key = group.key;
+  sectorTabs.classList.remove('two-lines','west-grid');
       let items = group.indices.map(i => ({ s: SECTORS[i], i }));
       if(!items.length){ return; }
       items.sort((a,b)=> norm(a.s).localeCompare(norm(b.s), 'en', {sensitivity:'base'}));
+  // Determine a common prefix pattern to hide (e.g., "Pentadaktylos West - ")
+      const rawNames = items.map(o => o.s.name || '');
+      let commonPrefix = rawNames[0];
+      for(const n of rawNames.slice(1)){
+        let j=0; while(j<commonPrefix.length && j<n.length && commonPrefix[j]===n[j]) j++;
+        commonPrefix = commonPrefix.slice(0,j);
+        if(!commonPrefix) break;
+      }
+      // Refine: only keep prefix up to last full word and only if contains ' - '
+      if(commonPrefix){
+        const dashIdx = commonPrefix.lastIndexOf(' - ');
+        if(dashIdx!==-1) commonPrefix = commonPrefix.slice(0, dashIdx+3); else commonPrefix='';
+      }
+  // Explicit overrides for Pentadaktylos groups (ensure full crag prefix removed)
+  if(key==='pentadaktylos-west') commonPrefix = 'Pentadaktylos west - ';
+  if(key==='pentadaktylos-central') commonPrefix = 'Pentadaktylos central - ';
       // Hue derived from crag key for stable tint
       let hash=0; for(let i=0;i<key.length;i++){ hash = (hash*31 + key.charCodeAt(i))>>>0; }
       const hue = 30 + (hash % 300);
@@ -530,7 +557,18 @@
       items.forEach(({s,i}) => {
         const b = document.createElement('button');
         b.className = 'tab' + (i===CURRENT_SECTOR_INDEX?' active':'');
-        b.textContent = s.name;
+        let label = s.name || '';
+        if(commonPrefix){
+          const ll = label.toLowerCase();
+          const cp = commonPrefix.toLowerCase();
+          if(ll.startsWith(cp)) label = label.slice(commonPrefix.length).trim();
+        }
+        if(!label) label = s.name || '(unnamed)';
+        // Capitalize first letter
+        if(label && label.length){
+          label = label.charAt(0).toUpperCase() + label.slice(1);
+        }
+        b.textContent = label;
         b.addEventListener('click', () => {
           CURRENT_SECTOR_INDEX = i;
           if(sel.value !== key) sel.value = key; // keep dropdown synced
@@ -538,13 +576,45 @@
         });
         sectorTabs.appendChild(b);
       });
+      // Pentadaktylos West: force 6 per row * 2 rows grid
+      if(key==='pentadaktylos-west'){
+        sectorTabs.classList.add('west-grid');
+      }
     }
 
     // ---------- Chart ----------
-    let chart;
+  let chart;
+  let CLIMBER_MARK = null; // { xIndex }
     const ctx = document.getElementById('chart').getContext('2d');
     function renderChart(labels, exposurePct){
       if(chart) chart.destroy();
+    const climberPlugin = {
+        id: 'climberMark',
+        afterDraw(c){
+          if(!CLIMBER_MARK) return;
+          const idx = CLIMBER_MARK.xIndex;
+          if(idx==null) return;
+          const meta = c.getDatasetMeta(0);
+          if(!meta || !meta.data || !meta.data[idx]) return;
+          const pt = meta.data[idx];
+          const ctx = c.ctx;
+          ctx.save();
+          const emoji = '🧗';
+      const area = c.chartArea;
+      const x = pt.x;
+      // Center vertically in plot area
+      const y = (area.top + area.bottom) / 2;
+      // Adaptive size: up to 60px or 30% of plot height
+      const size = Math.min(60, Math.max(28, Math.floor((area.bottom-area.top)*0.30)));
+      ctx.font = size + 'px system-ui, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.shadowColor = 'rgba(0,0,0,0.25)';
+          ctx.shadowBlur = 4; ctx.shadowOffsetY = 2;
+          ctx.fillText(emoji, x, y);
+          ctx.restore();
+        }
+      };
       chart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -571,7 +641,8 @@
             tooltip:{callbacks:{ label: c => `${t().sun}: ${c.parsed.y.toFixed(0)}%` }, titleFont:{size:13}, bodyFont:{size:12}},
             title:{display:true,text:t().chartTitle, font:{size:14}}
           }
-        }
+        },
+        plugins:[climberPlugin]
       });
     }
 
@@ -674,6 +745,23 @@
       labels.length = finalLen;
       exposure.length = finalLen;
 
+      // ---- Compute central zero-exposure segment for climber mark ----
+      (function computeClimber(){
+        CLIMBER_MARK = null;
+        if(!exposure.length) return;
+        const zeros = [];// {start,end}
+        let start=null;
+        for(let i=0;i<exposure.length;i++){
+          if(exposure[i] < 0.5){ if(start==null) start=i; }
+          else if(start!=null){ zeros.push({start,end:i-1}); start=null; }
+        }
+        if(start!=null) zeros.push({start,end:exposure.length-1});
+        if(!zeros.length) return;
+        const midAll = (exposure.length-1)/2;
+        let best=null, bestDist=Infinity;
+        zeros.forEach(z=>{ const mid = (z.start+z.end)/2; const dist = Math.abs(mid-midAll); if(dist<bestDist){ bestDist=dist; best={mid, z}; } });
+        if(best) CLIMBER_MARK = { xIndex: Math.round(best.mid) };
+      })();
       renderChart(labels, exposure);
 
       // מטא
