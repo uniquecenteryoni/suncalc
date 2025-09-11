@@ -101,6 +101,8 @@
           <input id="dateInp" type="date" />
         </div>
       </div>
+  <div id="dataStatus" class="foot" style="margin-top:6px;font-size:12px;color:#6b7280"></div>
+  <div id="dataStatus" class="foot" style="margin-top:6px;font-size:12px;color:#6b7280"></div>
     </div>
 
     <div class="card chart-wrap">
@@ -148,90 +150,54 @@
      *   דוגמאות: [-90..+90] = כל הקדימה; [0..+90] = ימין בלבד; [-90..0] = שמאל בלבד.
      ***************/
 
-    const SECTORS_JSON = {
-      "sectors": [
-        {
-          "id": "episkopi-main",
-          "name": "Εpiskopi-main",
-          "edge": {
-            "p1": { "lat": 34.79404109798569, "lon": 32.526900902158296 },
-            "p2": { "lat": 34.793816565875005, "lon": 32.52695509277609 }
-          },
-          "face_side": "left",
-          "tilt_from_vertical_deg": -25,
-          "horizon_alt_deg": 0,
-          "obstacles": [
-            { "az_from_deg": -90, "az_to_deg": 90, "alt_min_deg": 5, "note": "עצים" }
-          ],
-          "min_alt_deg": 3,
-          "az_margin_deg": 0
+    // Dynamic sectors source (loaded from sectors.json) with local-file fallback
+    const DEFAULT_SECTORS = [
+      {"id":"episkopi-main","name":"Εpiskopi-main","edge":{"p1":{"lat":34.79404109798569,"lon":32.526900902158296},"p2":{"lat":34.793816565875005,"lon":32.52695509277609}},"face_side":"left","tilt_from_vertical_deg":-25,"horizon_alt_deg":0,"obstacles":[{"az_from_deg":-90,"az_to_deg":90,"alt_min_deg":5,"note":"עצים"}],"min_alt_deg":3,"az_margin_deg":0},
+      {"id":"Episkopi-face","name":"Εpiskopi-face","edge":{"p1":{"lat":34.7937292884894,"lon":32.52672671851574},"p2":{"lat":34.79375792308118,"lon":32.52685546454608}},"face_side":"right","tilt_from_vertical_deg":0,"horizon_alt_deg":1,"obstacles":[{"az_from_deg":230,"az_to_deg":260,"alt_min_deg":0,"note":"עצים"}],"min_alt_deg":3,"az_margin_deg":0},
+      {"id":"gerakopetra main","name":"Gerakopetra main","edge":{"p1":{"lat":34.96540123799258,"lon":32.36986707840061},"p2":{"lat":34.965962781972244,"lon":32.37032526703459}},"face_side":"left","tilt_from_vertical_deg":0,"horizon_alt_deg":0,"obstacles":[{"az_from_deg":230,"az_to_deg":260,"alt_min_deg":0,"note":"עצים"}],"min_alt_deg":3,"az_margin_deg":0},
+      {"id":"gerakopetra slab","name":"Gerakopetra slab","edge":{"p1":{"lat":34.965920959683054,"lon":32.370509929547794},"p2":{"lat":34.96574382108759,"lon":32.370879486717556}},"face_side":"left","tilt_from_vertical_deg":25,"horizon_alt_deg":0,"obstacles":[{"az_from_deg":0,"az_to_deg":0,"alt_min_deg":0,"note":"עצים"}],"min_alt_deg":3,"az_margin_deg":0},
+      {"id":"alikou - main","name":"Alikou - main","edge":{"p1":{"lat":34.95708693692952,"lon":32.37886983471838},"p2":{"lat":34.95735094926628,"lon":32.37895296535831}},"face_side":"left","tilt_from_vertical_deg":0,"horizon_alt_deg":0,"obstacles":[{"az_from_deg":230,"az_to_deg":260,"alt_min_deg":0,"note":"עצים"}],"min_alt_deg":3,"az_margin_deg":0}
+    ];
+  let RAW_SECTORS = [];
+  let SECTORS = [];
+  let LOAD_USED_FALLBACK = false;
+  let LOAD_COUNT = 0;
+  async function loadSectors(){
+    let usedFallback = false;
+    try{
+      const res = await fetch('sectors.json?ts=' + Date.now(), { cache: 'no-store' });
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      const data = await res.json();
+      RAW_SECTORS = Array.isArray(data?.sectors) ? data.sectors : [];
+      if(!RAW_SECTORS.length) throw new Error('Empty sectors');
+    }catch(err){
+      console.warn('Failed to load sectors.json, using defaults.', err);
+      RAW_SECTORS = DEFAULT_SECTORS;
+      usedFallback = true;
+    }
+    LOAD_USED_FALLBACK = usedFallback;
+    SECTORS = RAW_SECTORS.map(s => {
+      const mid = { lat:(s.edge.p1.lat+s.edge.p2.lat)/2, lon:(s.edge.p1.lon+s.edge.p2.lon)/2 };
+      const aspect = aspectFromEdge(s.edge, s.face_side);
+      return {
+        id: s.id,
+        name: s.name,
+        lat: mid.lat,
+        lon: mid.lon,
+        aspect,
+        tilt: (typeof s.tilt_from_vertical_deg === 'number') ? s.tilt_from_vertical_deg : 0,
+        defaults: {
+          minAlt: (typeof s.min_alt_deg === 'number') ? s.min_alt_deg : 3,
+          margin: (typeof s.az_margin_deg === 'number') ? s.az_margin_deg : 0,
+          horizon: (typeof s.horizon_alt_deg === 'number') ? s.horizon_alt_deg : 0
         },
-        {
-          "id": "Episkopi-face",
-          "name": "Εpiskopi-face",
-          "edge": {
-            "p1": { "lat": 34.7937292884894, "lon": 32.52672671851574 },
-            "p2": { "lat": 34.79375792308118, "lon": 32.52685546454608 }
-          },
-          "face_side": "right",
-          "tilt_from_vertical_deg": 0,
-          "horizon_alt_deg": 1,
-          "obstacles": [
-            { "az_from_deg": 230, "az_to_deg": 260, "alt_min_deg": 0, "note": "עצים" }
-          ],
-          "min_alt_deg": 3,
-          "az_margin_deg": 0
-        },
-        {
-          "id": "gerakopetra main",
-          "name": "Gerakopetra main",
-          "edge": {
-            "p1": { "lat": 34.96540123799258, "lon": 32.36986707840061 },
-            "p2": { "lat": 34.965962781972244, "lon": 32.37032526703459 }
-          },
-          "face_side": "left",
-          "tilt_from_vertical_deg": 0,
-          "horizon_alt_deg": 0,
-          "obstacles": [
-            { "az_from_deg": 230, "az_to_deg": 260, "alt_min_deg": 0, "note": "עצים" }
-          ],
-          "min_alt_deg": 3,
-          "az_margin_deg": 0
-        },
-        {
-          "id": "gerakopetra slab",
-          "name": "Gerakopetra slab",
-          "edge": {
-            "p1": { "lat": 34.965920959683054, "lon": 32.370509929547794 },
-            "p2": { "lat": 34.96574382108759, "lon": 32.370879486717556 }
-          },
-          "face_side": "left",
-          "tilt_from_vertical_deg": 25,
-          "horizon_alt_deg": 0,
-          "obstacles": [
-            { "az_from_deg": 0, "az_to_deg": 0, "alt_min_deg": 0, "note": "עצים" }
-          ],
-          "min_alt_deg": 3,
-          "az_margin_deg": 0
-        },
-        {
-          "id": "alikou - main",
-          "name": "Alikou - main",
-          "edge": {
-            "p1": { "lat": 34.95708693692952, "lon": 32.37886983471838 },
-            "p2": { "lat": 34.95735094926628, "lon": 32.37895296535831 }
-          },
-          "face_side": "left",
-          "tilt_from_vertical_deg": 0,
-          "horizon_alt_deg": 0,
-          "obstacles": [
-            { "az_from_deg": 230, "az_to_deg": 260, "alt_min_deg": 0, "note": "עצים" }
-          ],
-          "min_alt_deg": 3,
-          "az_margin_deg": 0
-        }
-      ]
-    };
+        obstaclesAbs: mapObstaclesRelativeToAspect(s.obstacles || [], aspect),
+        raw: s
+      };
+    });
+    SECTORS.sort((a,b) => (a.name||'').localeCompare(b.name||'', undefined, {sensitivity:'base'}));
+    LOAD_COUNT = SECTORS.length;
+  }
 
     // ---------- מתמטיקה ----------
     const d2 = n => String(n).padStart(2,'0');
@@ -305,28 +271,7 @@
       return (maxAlt === -Infinity) ? null : maxAlt;
     }
 
-    // בניית אובייקטי סקטור לשימוש באפליקציה (מיקום = מרכז הצלע)
-    const SECTORS = SECTORS_JSON.sectors.map(s => {
-      const mid = { lat:(s.edge.p1.lat+s.edge.p2.lat)/2, lon:(s.edge.p1.lon+s.edge.p2.lon)/2 };
-      const aspect = aspectFromEdge(s.edge, s.face_side);
-      return {
-        id: s.id,
-        name: s.name,
-        lat: mid.lat,
-        lon: mid.lon,
-        aspect,
-        tilt: (typeof s.tilt_from_vertical_deg === 'number') ? s.tilt_from_vertical_deg : 0,
-        defaults: {
-          minAlt: (typeof s.min_alt_deg === 'number') ? s.min_alt_deg : 3,
-          margin: (typeof s.az_margin_deg === 'number') ? s.az_margin_deg : 0,
-          horizon: (typeof s.horizon_alt_deg === 'number') ? s.horizon_alt_deg : 0
-        },
-        obstaclesAbs: mapObstaclesRelativeToAspect(s.obstacles || [], aspect),
-        raw: s
-      };
-    });
-    // מיון סקטורים לפי האל"ף-בי"ת
-    SECTORS.sort((a,b) => (a.name||'').localeCompare(b.name||'', undefined, {sensitivity:'base'}));
+  // SECTORS will be populated by loadSectors()
 
     // ---------- UI ----------
     const sel = document.getElementById('sectorSel');
@@ -428,18 +373,32 @@
   document.getElementById('fbSendBtn').textContent = tr.fb.send;
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       // Fit to viewport: set header height CSS var
       const header = document.querySelector('.site-topbar');
       const setHeaderH = () => document.documentElement.style.setProperty('--headerH', `${header?.offsetHeight||0}px`);
       setHeaderH();
       window.addEventListener('resize', setHeaderH);
-      SECTORS.forEach((s,i)=>{ const o=document.createElement('option'); o.value=i; o.textContent=s.name; sel.appendChild(o); });
+      try{
+        await loadSectors();
+      }catch(err){
+        console.error('Failed to load sectors.json', err);
+      }
+  sel.innerHTML = '';
+  const norm = s => (s.name||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[Εε]/g,'e');
+  const sorted = SECTORS.map((s,i)=>({s,i})).sort((a,b)=> norm(a.s).localeCompare(norm(b.s), 'en', {sensitivity:'base'}));
+  sorted.forEach(({s,i})=>{ const o=document.createElement('option'); o.value=i; o.textContent=s.name; sel.appendChild(o); });
+      if(SECTORS.length>0 && sel.value==='') sel.value = '0';
       const now = new Date();
       dateInp.value = `${now.getFullYear()}-${d2(now.getMonth()+1)}-${d2(now.getDate())}`;
       setLangAttrs();
       applyTexts();
       setLangUI();
+  // Show where sectors came from
+      const ds = document.getElementById('dataStatus');
+  if(ds){ ds.textContent = LOAD_USED_FALLBACK ? 'Using built-in defaults (sectors.json not loaded).' : `Loaded ${LOAD_COUNT} sectors from sectors.json`; }
+      // Initial render if we have sectors
+      if(SECTORS.length){ calc(); } else { summary.textContent = 'No sectors loaded. Place sectors.json or use the Map editor to create one.'; }
     });
     sel.addEventListener('change', calc);
     dateInp.addEventListener('change', calc);
@@ -454,6 +413,8 @@
     }
     navCalc.addEventListener('click', () => setView('calc'));
     navFeedback.addEventListener('click', () => setView('feedback'));
+
+  // No manual JSON loading in calc view; it always fetches sectors.json from the same folder
 
     function setLangUI(){
       const map = { en:['🇬🇧','English'], el:['🇬🇷','Ελληνικά'], ru:['🇷🇺','Русский'], he:['🇮🇱','עברית'] };
@@ -480,26 +441,39 @@
       }
     });
 
+    function asciiKey(str){
+      return (str||'')
+        .toLowerCase()
+        .replace(/[Εε]/g,'e') // map Greek epsilon to latin e for stable sorting
+        .normalize('NFKD')
+        .replace(/[\u0300-\u036f]/g,'');
+    }
     function cragKey(s){
-      const base = (s.name || s.id || '').toLowerCase();
-      const bySpace = base.split(/\s|-/)[0];
-      return bySpace || base;
+      // Prefer id (ASCII), fallback to name. Extract first ASCII word to group variants consistently.
+      const base = (s.id || s.name || '').toLowerCase();
+      const m = base.match(/[a-z0-9]+/);
+      return m ? m[0] : base;
     }
     function renderSectorTabs(){
-      const current = SECTORS[+sel.value];
-      const key = cragKey(current);
-      const group = SECTORS.filter(x => cragKey(x) === key).sort((a,b)=> (a.name||'').localeCompare(b.name||'', undefined, {sensitivity:'base'}));
+      const norm = s => (s.name||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[Εε]/g,'e');
       sectorTabs.innerHTML = '';
-  // Choose a consistent hue from crag key
-  let hash=0; for(let i=0;i<key.length;i++){ hash = (hash*31 + key.charCodeAt(i))>>>0; }
-  const hue = 30 + (hash % 300); // 30..329 range for pleasant colors
-  sectorTabs.style.setProperty('--h', String(hue));
-      group.forEach(sx => {
-        const idx = SECTORS.indexOf(sx);
+      if(!SECTORS.length || sel.value==='') return;
+      const selIdx = +sel.value;
+      const selected = SECTORS[selIdx];
+      const key = cragKey(selected);
+      // Keep only sectors that share the same first ASCII word (crag) as the selected
+      let same = SECTORS.map((s,i)=>({s,i})).filter(({s}) => cragKey(s) === key);
+      if(!same.length) same = [{s:selected, i:selIdx}];
+      same.sort((a,b)=> norm(a.s).localeCompare(norm(b.s), 'en', {sensitivity:'base'}));
+      // Hue derived from crag key for stable tint
+      let hash=0; for(let i=0;i<key.length;i++){ hash = (hash*31 + key.charCodeAt(i))>>>0; }
+      const hue = 30 + (hash % 300);
+      sectorTabs.style.setProperty('--h', String(hue));
+      same.forEach(({s,i}) => {
         const b = document.createElement('button');
-        b.className = 'tab' + (idx===+sel.value?' active':'');
-        b.textContent = sx.name;
-        b.addEventListener('click', () => { sel.value = idx; calc(); });
+        b.className = 'tab' + (i===selIdx?' active':'');
+        b.textContent = s.name;
+        b.addEventListener('click', () => { sel.value = i; calc(); });
         sectorTabs.appendChild(b);
       });
     }
@@ -541,6 +515,12 @@
 
     // ---------- חישוב (חשיפה מדורגת שמגיעה ל-100%) ----------
     function calc(){
+      if(!SECTORS.length || sel.value===''){
+        if(chart) { chart.destroy(); chart = null; }
+        sectorTabs.innerHTML = '';
+        summary.textContent = 'No sectors loaded.';
+        return;
+      }
       const s = SECTORS[+sel.value];
       renderSectorTabs();
       const dateStr = dateInp.value;

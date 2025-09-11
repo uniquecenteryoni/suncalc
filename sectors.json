@@ -1,0 +1,310 @@
+{
+  "sectors": [
+    {
+      "id": "episkopi-main",
+      "name": "Εpiskopi-main",
+      "edge": {
+        "p1": {
+          "lat": 34.79404109798569,
+          "lon": 32.526900902158296
+        },
+        "p2": {
+          "lat": 34.793816565875005,
+          "lon": 32.52695509277609
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": -25,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "Episkopi-face",
+      "name": "Εpiskopi-face",
+      "edge": {
+        "p1": {
+          "lat": 34.7937292884894,
+          "lon": 32.52672671851574
+        },
+        "p2": {
+          "lat": 34.79375792308118,
+          "lon": 32.52685546454608
+        }
+      },
+      "face_side": "right",
+      "tilt_from_vertical_deg": 0,
+      "horizon_alt_deg": 1,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "gerakopetra main",
+      "name": "Gerakopetra main",
+      "edge": {
+        "p1": {
+          "lat": 34.96540123799258,
+          "lon": 32.36986707840061
+        },
+        "p2": {
+          "lat": 34.965962781972244,
+          "lon": 32.37032526703459
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": 0,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "gerakopetra slab",
+      "name": "Gerakopetra slab",
+      "edge": {
+        "p1": {
+          "lat": 34.965920959683054,
+          "lon": 32.370509929547794
+        },
+        "p2": {
+          "lat": 34.96574382108759,
+          "lon": 32.370879486717556
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": 25,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "alikou - main",
+      "name": "Alikou - main",
+      "edge": {
+        "p1": {
+          "lat": 34.95714677646421,
+          "lon": 32.37895131111146
+        },
+        "p2": {
+          "lat": 34.957379559867015,
+          "lon": 32.3789088889141
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": 23,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "alikou Slab",
+      "name": "Alikou Slab",
+      "edge": {
+        "p1": {
+          "lat": 34.95631142313296,
+          "lon": 32.378511428833015
+        },
+        "p2": {
+          "lat": 34.956540046996174,
+          "lon": 32.37887084484101
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": 30,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "episkopi (SW)",
+      "name": "Episkopi (SW)",
+      "edge": {
+        "p1": {
+          "lat": 34.79441793348591,
+          "lon": 32.526564002037055
+        },
+        "p2": {
+          "lat": 34.79449282331177,
+          "lon": 32.526816129684455
+        }
+      },
+      "face_side": "right",
+      "tilt_from_vertical_deg": 0,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "droushia (NW)",
+      "name": "Droushia (NW)",
+      "edge": {
+        "p1": {
+          "lat": 34.97177773743691,
+          "lon": 32.39514740659633
+        },
+        "p2": {
+          "lat": 34.971888629459656,
+          "lon": 32.39521507039469
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": 0,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "droushia (N)",
+      "name": "Droushia (N)",
+      "edge": {
+        "p1": {
+          "lat": 34.971892325857816,
+          "lon": 32.395233114074244
+        },
+        "p2": {
+          "lat": 34.97190341505135,
+          "lon": 32.395422572709705
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": 0,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "galataria",
+      "name": "Galataria",
+      "edge": {
+        "p1": {
+          "lat": 34.859260244863975,
+          "lon": 32.65447318553925
+        },
+        "p2": {
+          "lat": 34.85892570595858,
+          "lon": 32.654693126678474
+        }
+      },
+      "face_side": "right",
+      "tilt_from_vertical_deg": 10,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "diarizous Main Slab",
+      "name": "Diarizous Main Slab",
+      "edge": {
+        "p1": {
+          "lat": 34.79635504820295,
+          "lon": 32.70254404258
+        },
+        "p2": {
+          "lat": 34.796229101836374,
+          "lon": 32.70263426097783
+        }
+      },
+      "face_side": "right",
+      "tilt_from_vertical_deg": 20,
+      "horizon_alt_deg": 30,
+      "obstacles": [
+        {
+          "az_from_deg": -90,
+          "az_to_deg": 90,
+          "alt_min_deg": 30,
+          "note": " הקיר המרכזי"
+        }
+      ],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "diarizous Main Wall",
+      "name": "Diarizous Main Wall",
+      "edge": {
+        "p1": {
+          "lat": 34.796339367689576,
+          "lon": 32.70252145335315
+        },
+        "p2": {
+          "lat": 34.79621798891242,
+          "lon": 32.70262523913808
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": 20,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "diarizous Picnic area",
+      "name": "Diarizous Picnic area",
+      "edge": {
+        "p1": {
+          "lat": 34.79579199236568,
+          "lon": 32.702323007505356
+        },
+        "p2": {
+          "lat": 34.79597720852601,
+          "lon": 32.70237262762417
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": 0,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "diarizous Road (S)",
+      "name": "Diarizous Road (S)",
+      "edge": {
+        "p1": {
+          "lat": 34.79612908546701,
+          "lon": 32.70238164946393
+        },
+        "p2": {
+          "lat": 34.79605499918929,
+          "lon": 32.70259366269881
+        }
+      },
+      "face_side": "right",
+      "tilt_from_vertical_deg": 0,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    },
+    {
+      "id": "diarizous Corner",
+      "name": "Diarizous  Corner",
+      "edge": {
+        "p1": {
+          "lat": 34.796255031986405,
+          "lon": 32.7023590948645
+        },
+        "p2": {
+          "lat": 34.79632911808439,
+          "lon": 32.70244029142253
+        }
+      },
+      "face_side": "left",
+      "tilt_from_vertical_deg": 0,
+      "horizon_alt_deg": 0,
+      "obstacles": [],
+      "min_alt_deg": 3,
+      "az_margin_deg": 0
+    }
+  ]
+}
