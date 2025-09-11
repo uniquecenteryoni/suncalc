@@ -83,11 +83,14 @@
   @media (max-width:640px){ .brand{display:none} }
   /* Mobile: show full Pentadaktylos West names (wrap allowed) */
   @media (max-width:640px){
-    /* Multi ( >3 sectors ) crag: show dropdown instead of tabs */
+    /* Multi ( >3 sectors ) crag: potential dropdown (shown via JS when needed) */
     #sectorTabs.multi-grid{grid-template-columns:repeat(2,1fr);}
     #sectorTabs.multi-grid .tab{white-space:normal;overflow:visible;text-overflow:unset;font-size:13px;line-height:1.15;padding:8px 6px;}
     #sectorTabs.multi-grid.mobile-hidden{display:none}
-    #mobileCragSelectWrap{display:block}
+    #mobileCragSelectWrap{display:none}
+  #mobileCragSelectWrap{position:relative}
+  #mobileCragSelectWrap::after{content:'▼';position:absolute;right:12px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:17px;color:#1f2937;filter:drop-shadow(0 1px 1px rgba(0,0,0,0.25))}
+  #mobileCragSelect{appearance:none;-webkit-appearance:none;background-clip:padding-box;padding-right:40px !important;}
   }
   @media (min-width:641px){
     #mobileCragSelectWrap{display:none}
@@ -630,7 +633,7 @@
         });
         sectorTabs.appendChild(b);
         // Populate mobile select for west
-        if(mobileCragSelect){
+  if(mobileCragSelect){
           const opt=document.createElement('option');
           opt.value=String(i); opt.textContent=label; if(i===CURRENT_SECTOR_INDEX) opt.selected=true; mobileCragSelect.appendChild(opt);
         }
@@ -638,19 +641,35 @@
       // Multi-sector layout & mobile dropdown if more than 3 sectors
       const isMulti = items.length > 3;
       if(isMulti) sectorTabs.classList.add('multi-grid');
-      if(isMulti){
-        const wrap = document.getElementById('mobileCragSelectWrap');
-        if(wrap){
-          if(window.matchMedia('(max-width:640px)').matches){
-            sectorTabs.classList.add('mobile-hidden');
-            wrap.style.display='block';
-            if(mobileCragSelect){
-              mobileCragSelect.onchange = e => { CURRENT_SECTOR_INDEX = +e.target.value; calc(); };
+      const wrap = document.getElementById('mobileCragSelectWrap');
+      if(wrap){
+        if(isMulti && window.matchMedia('(max-width:640px)').matches){
+          // Show dropdown instead of tabs
+          sectorTabs.classList.add('mobile-hidden');
+          wrap.style.display='block';
+          if(mobileCragSelect){
+            // Add attention style (dynamic hue)
+            mobileCragSelect.dataset.h = hue;
+            mobileCragSelect.style.background = `linear-gradient(135deg, hsl(${hue} 100% 92%), hsl(${hue} 100% 98%))`;
+            mobileCragSelect.style.border = `2px solid hsl(${hue} 70% 45%)`;
+            mobileCragSelect.style.boxShadow = '0 0 0 3px hsl(var(--h) 100% 50% / 0.15)';
+            mobileCragSelect.style.fontWeight = '600';
+            mobileCragSelect.style.color = '#1f2937';
+            if(!mobileCragSelect.querySelector('option[data-placeholder]')){
+              const ph=document.createElement('option');
+              ph.textContent='▼ Select sector';
+              ph.value='';
+              ph.disabled=true; ph.selected = !mobileCragSelect.value;
+              ph.setAttribute('data-placeholder','1');
+              mobileCragSelect.insertBefore(ph, mobileCragSelect.firstChild);
             }
-          } else {
+            // Ensure onchange bound once
+            mobileCragSelect.onchange = e => { CURRENT_SECTOR_INDEX = +e.target.value; calc(); };
+          }
+        } else {
+          // Show tabs (≤3 sectors OR desktop)
             sectorTabs.classList.remove('mobile-hidden');
             wrap.style.display='none';
-          }
         }
       }
     }
