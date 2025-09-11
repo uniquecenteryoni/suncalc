@@ -70,12 +70,44 @@
   @media (max-width:860px){ .app{width:100%;} .controls{grid-template-columns:1fr; grid-auto-rows:auto} }
   /* Hide big title block on phones so UI starts directly with crag selection */
   @media (max-width:640px){ .brand{display:none} }
+  /* Mobile: show full Pentadaktylos West names (wrap allowed) */
+  @media (max-width:640px){
+    #sectorTabs.west-grid{grid-template-columns:repeat(2,1fr);}
+    #sectorTabs.west-grid .tab{white-space:normal;overflow:visible;text-overflow:unset;font-size:13px;line-height:1.15;padding:8px 6px;}
+    /* Hide west tabs on mobile, show dropdown instead */
+    #sectorTabs.west-grid.mobile-hidden{display:none}
+    #westMobileSelectWrap{display:block}
+  }
+  @media (min-width:641px){
+    #westMobileSelectWrap{display:none}
+  }
   </style>
 </head>
 <body>
   <header class="card topbar site-topbar">
     <nav style="display:flex;gap:12px;align-items:center">
-      <button id="navCalc" class="nav-btn active" data-view="calc"><span class="icon" aria-hidden="true">🧮</span><span class="label">Calculator</span></button>
+      <button id="navCalc" class="nav-btn active" data-view="calc"><span class="icon" aria-hidden="true" style="display:inline-flex;align-items:center;justify-content:center">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+          <defs>
+            <linearGradient id="sunShadeSplit" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#FFD94D"/>
+              <stop offset="50%" stop-color="#FFD94D"/>
+              <stop offset="50%" stop-color="#4B5563"/>
+              <stop offset="100%" stop-color="#1F2937"/>
+            </linearGradient>
+          </defs>
+          <!-- Sun circle split half bright half shade -->
+          <circle cx="12" cy="12" r="6" fill="url(#sunShadeSplit)" stroke="#874400" stroke-width="0.6" />
+          <!-- Rays only on bright half -->
+          <g stroke="#F59E0B" stroke-linecap="round" stroke-width="1.4">
+            <line x1="12" y1="2.5" x2="12" y2="5" />
+            <line x1="7.05" y1="4.05" x2="8.8" y2="5.8" />
+            <line x1="4.5" y1="9.5" x2="7" y2="9.5" />
+            <line x1="7.05" y1="19.95" x2="8.85" y2="18.2" />
+            <line x1="12" y1="19" x2="12" y2="21.5" />
+          </g>
+        </svg>
+      </span><span class="label">Calculator</span></button>
       <button id="navFeedback" class="nav-btn" data-view="feedback"><span class="icon" aria-hidden="true">✉️</span><span class="label">Feedback</span></button>
     </nav>
     <div class="lang-switch" style="position:relative;display:flex;align-items:center;gap:8px">
@@ -115,6 +147,9 @@
 
     <div class="card chart-wrap">
       <div id="sectorTabs"></div>
+      <div id="westMobileSelectWrap" style="display:none;margin:4px 0 8px 0">
+        <select id="westMobileSelect" style="width:100%;padding:6px 8px;font-size:13px"></select>
+      </div>
       <div class="meta" id="meta" style="display:none"></div>
       <div class="canvas-box"><canvas id="chart"></canvas></div>
       <div id="summary" class="foot" style="margin-top:8px"></div>
@@ -523,7 +558,7 @@
         CURRENT_SECTOR_INDEX = g.indices[0];
       }
     }
-    function renderSectorTabs(){
+  function renderSectorTabs(){
       const norm = s => (s.name||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[Εε]/g,'e');
       sectorTabs.innerHTML = '';
       if(!SECTORS.length || !CRAG_SEL_KEY){ return; }
@@ -554,6 +589,9 @@
       let hash=0; for(let i=0;i<key.length;i++){ hash = (hash*31 + key.charCodeAt(i))>>>0; }
       const hue = 30 + (hash % 300);
       sectorTabs.style.setProperty('--h', String(hue));
+      // Mobile dropdown preparation for pentadaktylos-west
+      const westMobileSelect = document.getElementById('westMobileSelect');
+      if(westMobileSelect) westMobileSelect.innerHTML='';
       items.forEach(({s,i}) => {
         const b = document.createElement('button');
         b.className = 'tab' + (i===CURRENT_SECTOR_INDEX?' active':'');
@@ -562,6 +600,11 @@
           const ll = label.toLowerCase();
           const cp = commonPrefix.toLowerCase();
           if(ll.startsWith(cp)) label = label.slice(commonPrefix.length).trim();
+        }
+        // Trim Diarizous prefix inside tabs
+        if(/^diarizous\s+/i.test(label)){
+          const rest = label.replace(/^diarizous\s+/i,'');
+          if(rest.length>0) label = rest;
         }
         if(!label) label = s.name || '(unnamed)';
         // Capitalize first letter
@@ -575,10 +618,34 @@
           calc();
         });
         sectorTabs.appendChild(b);
+        // Populate mobile select for west
+        if(key==='pentadaktylos-west' && westMobileSelect){
+          const opt=document.createElement('option');
+          opt.value=String(i); opt.textContent=label; if(i===CURRENT_SECTOR_INDEX) opt.selected=true; westMobileSelect.appendChild(opt);
+        }
       });
       // Pentadaktylos West: force 6 per row * 2 rows grid
       if(key==='pentadaktylos-west'){
         sectorTabs.classList.add('west-grid');
+      }
+      // If west on mobile -> hide tabs, show select
+      if(key==='pentadaktylos-west'){
+        const wrap = document.getElementById('westMobileSelectWrap');
+        if(wrap){
+          if(window.matchMedia('(max-width:640px)').matches){
+            sectorTabs.classList.add('mobile-hidden');
+            wrap.style.display='block';
+            const westMobileSelect = document.getElementById('westMobileSelect');
+            if(westMobileSelect){
+              westMobileSelect.onchange = e => {
+                CURRENT_SECTOR_INDEX = +e.target.value; calc();
+              };
+            }
+          } else {
+            sectorTabs.classList.remove('mobile-hidden');
+            wrap.style.display='none';
+          }
+        }
       }
     }
 
