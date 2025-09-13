@@ -46,10 +46,15 @@
     .brand .titles{display:flex;flex-direction:column;gap:4px;align-items:center;text-align:center}
   .brand .title{margin:0;font-size:28px;line-height:1.2;letter-spacing:.2px}
     .brand .subtitle{margin:0;color:var(--muted);font-size:13px}
-    .controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:end}
+  .controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:end}
+  .select-wrap{position:relative;}
+  .select-wrap::after{content:'▼';position:absolute;right:12px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:14px;color:#1f2937;opacity:.85}
+  #mobileCragSelectWrap{position:relative}
+  #mobileCragSelectWrap::after{content:'▼';position:absolute;right:12px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:17px;color:#1f2937;filter:drop-shadow(0 1px 1px rgba(0,0,0,0.25))}
   label{display:block;font-size:11px;color:var(--muted);margin-bottom:4px;letter-spacing:.15px;text-transform:uppercase}
   select,input,button,textarea{width:100%;padding:8px 10px;border-radius:0;border:1px solid rgba(229,231,235,0.8);background:#ffffff;color:var(--text);font-size:14px}
-    select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#2f8cff 50%),linear-gradient(135deg,#2f8cff 50%,transparent 50%),linear-gradient(to right,#ffffff,#ffffff);background-position:calc(100% - 18px) calc(50% - 3px),calc(100% - 12px) calc(50% - 3px),calc(100% - 36px) 0;background-size:6px 6px,6px 6px,1px 100%;background-repeat:no-repeat}
+  select{appearance:none;background:#ffffff;padding-right:36px !important;text-align:center;text-align-last:center}
+  #mobileCragSelect{text-align:center;text-align-last:center;padding-right:40px !important;}
     select:focus,input:focus,textarea:focus{outline:none;border-color:#93c5fd;box-shadow:0 0 0 2px rgba(147,197,253,.35)}
     button{background:linear-gradient(135deg,#2f8cff,#7cc8ff);border:none;color:#07101a;font-weight:700;cursor:pointer}
     button:active{transform:scale(.98)}
@@ -87,10 +92,6 @@
     #sectorTabs.multi-grid{grid-template-columns:repeat(2,1fr);}
     #sectorTabs.multi-grid .tab{white-space:normal;overflow:visible;text-overflow:unset;font-size:13px;line-height:1.15;padding:8px 6px;}
     #sectorTabs.multi-grid.mobile-hidden{display:none}
-    #mobileCragSelectWrap{display:none}
-  #mobileCragSelectWrap{position:relative}
-  #mobileCragSelectWrap::after{content:'▼';position:absolute;right:12px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:17px;color:#1f2937;filter:drop-shadow(0 1px 1px rgba(0,0,0,0.25))}
-  #mobileCragSelect{appearance:none;-webkit-appearance:none;background-clip:padding-box;padding-right:40px !important;}
   }
   @media (min-width:641px){
     #mobileCragSelectWrap{display:none}
@@ -137,6 +138,7 @@
       </div>
     </div>
   </header>
+  <div id="dataWarn" style="display:none;background:#fff3cd;color:#7c5300;padding:6px 12px;font-size:13px;border:1px solid #f7e0a3;border-left:none;border-right:none"></div>
   <div class="app">
     <div class="card" id="calcView">
       <div class="brand">
@@ -149,7 +151,7 @@
       <div class="controls">
         <div>
           <label for="sectorSel" id="label-sector">Sector</label>
-          <select id="sectorSel"></select>
+          <div class="select-wrap"><select id="sectorSel"></select></div>
         </div>
         <div>
           <label for="dateInp" id="label-date">Date</label>
@@ -229,7 +231,14 @@
       const res = await fetch('sectors.json?ts=' + Date.now(), { cache: 'no-store' });
       if(!res.ok) throw new Error('HTTP '+res.status);
       const data = await res.json();
-      RAW_SECTORS = Array.isArray(data?.sectors) ? data.sectors : [];
+      // Accept either { sectors: [...] } or a raw array
+      if(Array.isArray(data)) {
+        RAW_SECTORS = data;
+      } else if(Array.isArray(data?.sectors)) {
+        RAW_SECTORS = data.sectors;
+      } else {
+        RAW_SECTORS = [];
+      }
       if(!RAW_SECTORS.length) throw new Error('Empty sectors');
     }catch(err){
       console.warn('Failed to load sectors.json, using defaults.', err);
@@ -420,7 +429,8 @@
     function applyTexts(){
       const tr = t();
       document.querySelector('.brand .title').textContent = tr.title;
-      document.querySelector('.brand .subtitle').textContent = `${tr.subtitle} 🧗‍♀️🧗‍♂️`;
+  // הסרת אימוג'י מטפסים מהכותרת לפי בקשה
+  document.querySelector('.brand .subtitle').textContent = tr.subtitle;
       document.title = tr.title;
       document.getElementById('label-sector').textContent = tr.labels.sector;
       document.getElementById('label-date').textContent = tr.labels.date;
@@ -444,6 +454,17 @@
         await loadSectors();
       }catch(err){
         console.error('Failed to load sectors.json', err);
+      }
+      // Warn if using defaults or file:// without fetch success
+      const warnEl = document.getElementById('dataWarn');
+      if(warnEl){
+        if(LOAD_USED_FALLBACK){
+          warnEl.style.display='block';
+          warnEl.textContent = 'נטענו סקטורים ברירת מחדל (לא נמצא או לא נטען sectors.json). ודא שהקובץ נמצא באותה תיקייה ונטען דרך שרת (לא file://).';
+        } else if(location.protocol==='file:'){
+          warnEl.style.display='block';
+          warnEl.textContent = 'ייתכן שהדפדפן חוסם fetch בקובץ מקומי. הפעל שרת סטטי (למשל: python -m http.server) כדי לטעון sectors.json מלא.';
+        }
       }
       // Build crag groups and populate dropdown with unique crag names
       buildGroups();
@@ -606,49 +627,46 @@
       // Mobile dropdown preparation for pentadaktylos-west
   const mobileCragSelect = document.getElementById('mobileCragSelect');
   if(mobileCragSelect) mobileCragSelect.innerHTML='';
-      items.forEach(({s,i}) => {
-        const b = document.createElement('button');
-        b.className = 'tab' + (i===CURRENT_SECTOR_INDEX?' active':'');
-        let label = s.name || '';
+      const buildLabel = (raw) => {
+        let label = raw || '';
         if(commonPrefix){
           const ll = label.toLowerCase();
           const cp = commonPrefix.toLowerCase();
           if(ll.startsWith(cp)) label = label.slice(commonPrefix.length).trim();
         }
-        // Trim Diarizous prefix inside tabs
         if(/^diarizous\s+/i.test(label)){
           const rest = label.replace(/^diarizous\s+/i,'');
           if(rest.length>0) label = rest;
         }
-        if(!label) label = s.name || '(unnamed)';
-        // Capitalize first letter
-        if(label && label.length){
-          label = label.charAt(0).toUpperCase() + label.slice(1);
-        }
+        if(!label) label = raw || '(unnamed)';
+        if(label.length) label = label.charAt(0).toUpperCase() + label.slice(1);
+        return label;
+      };
+      // Build both tabs and dropdown options (we may hide tabs later)
+      items.forEach(({s,i}) => {
+        const label = buildLabel(s.name || '');
+        const b = document.createElement('button');
+        b.className = 'tab' + (i===CURRENT_SECTOR_INDEX?' active':'');
         b.textContent = label;
-        b.addEventListener('click', () => {
-          CURRENT_SECTOR_INDEX = i;
-          if(sel.value !== key) sel.value = key; // keep dropdown synced
-          calc();
-        });
+        b.addEventListener('click', () => { CURRENT_SECTOR_INDEX = i; if(sel.value !== key) sel.value = key; calc(); });
         sectorTabs.appendChild(b);
-        // Populate mobile select for west
-  if(mobileCragSelect){
+        if(mobileCragSelect){
           const opt=document.createElement('option');
           opt.value=String(i); opt.textContent=label; if(i===CURRENT_SECTOR_INDEX) opt.selected=true; mobileCragSelect.appendChild(opt);
         }
       });
-      // Multi-sector layout & mobile dropdown if more than 3 sectors
-      const isMulti = items.length > 3;
-      if(isMulti) sectorTabs.classList.add('multi-grid');
+
       const wrap = document.getElementById('mobileCragSelectWrap');
+      const count = items.length;
+      const isMobile = window.matchMedia('(max-width:640px)').matches;
+      const needDropdown = (isMobile && count >= 4) || (!isMobile && count >= 5);
       if(wrap){
-        if(isMulti && window.matchMedia('(max-width:640px)').matches){
-          // Show dropdown instead of tabs
+        if(needDropdown){
+          // Hide tabs entirely, show dropdown
           sectorTabs.classList.add('mobile-hidden');
+          sectorTabs.style.display='none';
           wrap.style.display='block';
           if(mobileCragSelect){
-            // Add attention style (dynamic hue)
             mobileCragSelect.dataset.h = hue;
             mobileCragSelect.style.background = `linear-gradient(135deg, hsl(${hue} 100% 92%), hsl(${hue} 100% 98%))`;
             mobileCragSelect.style.border = `2px solid hsl(${hue} 70% 45%)`;
@@ -663,50 +681,22 @@
               ph.setAttribute('data-placeholder','1');
               mobileCragSelect.insertBefore(ph, mobileCragSelect.firstChild);
             }
-            // Ensure onchange bound once
             mobileCragSelect.onchange = e => { CURRENT_SECTOR_INDEX = +e.target.value; calc(); };
           }
         } else {
-          // Show tabs (≤3 sectors OR desktop)
-            sectorTabs.classList.remove('mobile-hidden');
-            wrap.style.display='none';
+          // Show tabs, hide dropdown
+          sectorTabs.classList.remove('mobile-hidden');
+          sectorTabs.style.display='';
+          wrap.style.display='none';
         }
       }
     }
 
     // ---------- Chart ----------
-  let chart;
-  let CLIMBER_MARK = null; // { xIndex }
+  let chart; // single chart instance
     const ctx = document.getElementById('chart').getContext('2d');
     function renderChart(labels, exposurePct){
       if(chart) chart.destroy();
-    const climberPlugin = {
-        id: 'climberMark',
-        afterDraw(c){
-          if(!CLIMBER_MARK) return;
-          const idx = CLIMBER_MARK.xIndex;
-          if(idx==null) return;
-          const meta = c.getDatasetMeta(0);
-          if(!meta || !meta.data || !meta.data[idx]) return;
-          const pt = meta.data[idx];
-          const ctx = c.ctx;
-          ctx.save();
-          const emoji = '🧗';
-      const area = c.chartArea;
-      const x = pt.x;
-      // Center vertically in plot area
-      const y = (area.top + area.bottom) / 2;
-      // Adaptive size: up to 60px or 30% of plot height
-      const size = Math.min(60, Math.max(28, Math.floor((area.bottom-area.top)*0.30)));
-      ctx.font = size + 'px system-ui, sans-serif';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.shadowColor = 'rgba(0,0,0,0.25)';
-          ctx.shadowBlur = 4; ctx.shadowOffsetY = 2;
-          ctx.fillText(emoji, x, y);
-          ctx.restore();
-        }
-      };
       chart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -733,8 +723,7 @@
             tooltip:{callbacks:{ label: c => `${t().sun}: ${c.parsed.y.toFixed(0)}%` }, titleFont:{size:13}, bodyFont:{size:12}},
             title:{display:true,text:t().chartTitle, font:{size:14}}
           }
-        },
-        plugins:[climberPlugin]
+        }
       });
     }
 
@@ -837,23 +826,6 @@
       labels.length = finalLen;
       exposure.length = finalLen;
 
-      // ---- Compute central zero-exposure segment for climber mark ----
-      (function computeClimber(){
-        CLIMBER_MARK = null;
-        if(!exposure.length) return;
-        const zeros = [];// {start,end}
-        let start=null;
-        for(let i=0;i<exposure.length;i++){
-          if(exposure[i] < 0.5){ if(start==null) start=i; }
-          else if(start!=null){ zeros.push({start,end:i-1}); start=null; }
-        }
-        if(start!=null) zeros.push({start,end:exposure.length-1});
-        if(!zeros.length) return;
-        const midAll = (exposure.length-1)/2;
-        let best=null, bestDist=Infinity;
-        zeros.forEach(z=>{ const mid = (z.start+z.end)/2; const dist = Math.abs(mid-midAll); if(dist<bestDist){ bestDist=dist; best={mid, z}; } });
-        if(best) CLIMBER_MARK = { xIndex: Math.round(best.mid) };
-      })();
       renderChart(labels, exposure);
 
       // מטא
@@ -876,15 +848,35 @@
         : t().segmentsNone;
     }
 
-    // Feedback send
-    const FB_EMAIL = 'unique.center.yoni.gmail.com';
+    // Feedback send (email pulled dynamically from footer link)
     document.getElementById('fbSendBtn').addEventListener('click', () => {
+      const creditLink = document.getElementById('creditEmail');
+      let targetEmail = '';
+      if(creditLink){
+        const href = creditLink.getAttribute('href')||'';
+        const m = href.match(/^mailto:(.+)$/i);
+        targetEmail = (m?m[1]:creditLink.textContent).trim();
+      }
+      const statusEl = document.getElementById('fbStatus');
+      const errors = [];
+      const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+      if(!targetEmail || !emailRe.test(targetEmail)){
+        errors.push('כתובת יעד לא תקינה.');
+      }
       const name = (document.getElementById('fbName').value||'').trim();
       const email = (document.getElementById('fbEmail').value||'').trim();
       const msg = (document.getElementById('fbMsg').value||'').trim();
+      if(!msg){ errors.push('נא להזין הודעה.'); }
+      if(email && !emailRe.test(email)){ errors.push('אימייל שגוי בשדה השולח.'); }
+      if(errors.length){
+        statusEl.style.color = '#b91c1c';
+        statusEl.textContent = errors.join(' ');
+        return;
+      }
+      statusEl.style.color = '';
       const subject = encodeURIComponent(`[Cyprus Crags] Feedback from ${name||'anonymous'}`);
       const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${msg}`);
-      const link = `mailto:${FB_EMAIL}?subject=${subject}&body=${body}`;
+      const link = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
       window.location.href = link;
       document.getElementById('fbStatus').textContent = t().fb.thanks;
     });
