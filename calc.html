@@ -192,7 +192,7 @@
     </div>
 
     <div class="card foot">
-  <div class="credit" id="creditLine">Built for climbers in Cyprus 🇨🇾 · Credit: <b>Yehonatan Cohen</b> · <a id="creditEmail" href="mailto:unique.center.yoni@gmail.com">unique.center.yoni@gmail.com</a> · © 2025</div>
+  <div class="credit" id="creditLine">Built for climbers in Cyprus 🇨🇾 · Credit: <b>Yehonatan Cohen</b> · <span id="creditEmail" style="cursor:pointer;text-decoration:underline" data-email="unique.center.yoni@gmail.com" title="Click to copy email">unique.center.yoni@gmail.com</span> · © 2025</div>
     </div>
   </div>
 
@@ -369,11 +369,11 @@
         sun: 'Sun', shade: 'Shade',
         axes: { xTitle: 'Time', yTitle: 'Exposure' },
         nav: { calc: 'Calculator', feedback: 'Feedback' },
-        credit: 'Built for climbers in Cyprus 🇨🇾 · Credit: Yehonatan Cohen',
+  credit: 'Built for climbers in Cyprus 🇨🇾 · Credit: Yehonatan Cohen',
         meta: { sector:'Sector', aspect:'Aspect', tilt:'Tilt', baseHorizon:'Base horizon', obstacles:'Obstacles', date:'Date', minAlt:'Min sun alt', azMargin:'Azimuth margin' },
   obstaclesNone: 'No obstacles', obstaclesCount: n => `${n} obstacles`,
   segmentsSome: 'Sun times', segmentsNone: 'No sun in 06:00–20:00 window with current parameters.',
-  fb: { title:'Send message / feedback', name:'Name', email:'Email', msg:'Message', send:'Send (a message, not a route) 🙂', thanks:'Thanks! Your email client should open. If not, copy the text and send manually.' }
+  fb: { title:'Send message / feedback', name:'Name', email:'Email', msg:'Message', send:'Send (a message, not a route) 🙂', thanks:'Thanks! Message sent.' }
       },
       el: {
         title: 'Ήλιος/Σκιά για αναρριχητικά πεδία στην Κύπρο',
@@ -383,11 +383,11 @@
         sun: 'Ήλιος', shade: 'Σκιά',
         axes: { xTitle: 'Ώρα', yTitle: 'Έκθεση' },
         nav: { calc: 'Υπολογιστής', feedback: 'Σχόλιο' },
-        credit: 'Φτιαγμένο για αναρριχητές στην Κύπρο 🇨🇾 · Πίστωση: Yehonatan Cohen',
+  credit: 'Φτιαγμένο για αναρριχητές στην Κύπρο 🇨🇾 · Πίστωση: Yehonatan Cohen',
         meta: { sector:'Τομέας', aspect:'Προσανατολισμός', tilt:'Κλίση', baseHorizon:'Βασικός ορίζοντας', obstacles:'Εμπόδια', date:'Ημερομηνία', minAlt:'Ελ. ελάχιστο ύψος', azMargin:'Περιθώριο αζιμ.' },
   obstaclesNone: 'Χωρίς εμπόδια', obstaclesCount: n => `${n} εμπόδια`,
   segmentsSome: 'Ώρες ήλιου', segmentsNone: 'Δεν υπάρχει ήλιος στο παράθυρο 06:00–20:00 με τις τρέχουσες ρυθμίσεις.',
-  fb: { title:'Αποστολή μηνύματος / σχόλιου', name:'Όνομα', email:'Email', msg:'Μήνυμα', send:'Αποστολή (μήνυμα, όχι διαδρομή) 🙂', thanks:'Ευχαριστούμε! Ο πελάτης email θα ανοίξει.' }
+  fb: { title:'Αποστολή μηνύματος / σχόλιου', name:'Όνομα', email:'Email', msg:'Μήνυμα', send:'Αποστολή (μήνυμα, όχι διαδρομή) 🙂', thanks:'Ευχαριστούμε! Το μήνυμα στάλθηκε.' }
       },
       ru: {
         title: 'Солнце/Тень для скал на Кипре',
@@ -397,11 +397,11 @@
         sun: 'Солнце', shade: 'Тень',
         axes: { xTitle: 'Время', yTitle: 'Экспозиция' },
         nav: { calc: 'Калькулятор', feedback: 'Отзыв' },
-        credit: 'Сделано для скалолазов Кипра 🇨🇾 · Автор: Yehonatan Cohen',
+  credit: 'Сделано для скалолазов Кипра 🇨🇾 · Автор: Yehonatan Cohen',
         meta: { sector:'Сектор', aspect:'Азимут стены', tilt:'Наклон', baseHorizon:'Базовый горизонт', obstacles:'Препятствия', date:'Дата', minAlt:'Мин. высота солнца', azMargin:'Допуск фронта' },
   obstaclesNone: 'Без препятствий', obstaclesCount: n => `${n} препятств.`,
   segmentsSome: 'Время солнца', segmentsNone: 'Солнца нет в окне 06:00–20:00 при текущих параметрах.',
-  fb: { title:'Отправить сообщение / отзыв', name:'Имя', email:'Email', msg:'Сообщение', send:'Отправить (сообщение, не маршрут) 🙂', thanks:'Спасибо! Должен открыться почтовый клиент.' }
+  fb: { title:'Отправить сообщение / отзыв', name:'Имя', email:'Email', msg:'Сообщение', send:'Отправить (сообщение, не маршрут) 🙂', thanks:'Спасибо! Сообщение отправлено.' }
       },
       he: {
         title: 'שמש/צל למצוקים בקפריסין',
@@ -411,11 +411,11 @@
         sun: 'שמש', shade: 'צל',
         axes: { xTitle: 'שעה', yTitle: 'חשיפה' },
         nav: { calc: 'מחשבון', feedback: 'פידבק' },
-        credit: 'נבנה עבור מטפסים בקפריסין 🇨🇾 · קרדיט: Yehonatan Cohen',
+  credit: 'נבנה עבור מטפסים בקפריסין 🇨🇾 · קרדיט: Yehonatan Cohen',
         meta: { sector:'סקטור', aspect:'חזית', tilt:'שיפוע', baseHorizon:'אופק בסיסי', obstacles:'מכשולים', date:'תאריך', minAlt:'גובה שמש מינ׳', azMargin:'שולי חזית' },
   obstaclesNone: 'אין מכשולים', obstaclesCount: n => `${n} מכשולים`,
   segmentsSome: 'זמני שמש', segmentsNone: 'אין שמש בין 06:00–20:00 עם ההגדרות הנוכחיות.',
-  fb: { title:'שליחת הודעה / משוב', name:'שם', email:'אימייל', msg:'הודעה', send:'שלח (הודעה, לא מסלול) 🙂', thanks:'תודה! אפליקציית הדוא"ל אמורה להיפתח.' }
+  fb: { title:'שליחת הודעה / משוב', name:'שם', email:'אימייל', msg:'הודעה', send:'שלח (הודעה, לא מסלול) 🙂', thanks:'תודה! ההודעה נשלחה.' }
       }
     };
     let CURRENT_LANG = 'en';
@@ -437,7 +437,7 @@
   navCalc.querySelector('.label').textContent = tr.nav.calc;
   navFeedback.querySelector('.label').textContent = tr.nav.feedback;
   // Use centralized email constant
-  creditLine.innerHTML = `${tr.credit} · <a id="creditEmail" href="mailto:${APP_EMAIL}">${APP_EMAIL}</a> · © 2025`;
+  creditLine.innerHTML = `${tr.credit} · <span id="creditEmail" style="cursor:pointer;text-decoration:underline" data-email="${APP_EMAIL}" title="Click to copy email">${APP_EMAIL}</span> · © 2025`;
       document.getElementById('fb-title').textContent = tr.fb.title;
       document.getElementById('fb-label-name').textContent = tr.fb.name;
       document.getElementById('fb-label-email').textContent = tr.fb.email;
@@ -849,41 +849,65 @@
         : t().segmentsNone;
     }
 
-    // Feedback send (email pulled dynamically from footer link)
-  const APP_EMAIL = 'unique.center.yoni@gmail.com';
-  document.getElementById('fbSendBtn').addEventListener('click', () => {
-      const creditLink = document.getElementById('creditEmail');
-      let targetEmail = '';
-      if(creditLink){
-        const href = creditLink.getAttribute('href')||'';
-        const m = href.match(/^mailto:(.+)$/i);
-        targetEmail = (m?m[1]:creditLink.textContent).trim();
-      }
-      const statusEl = document.getElementById('fbStatus');
-      const errors = [];
-      const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-      if(!targetEmail || !emailRe.test(targetEmail)){
-        errors.push('כתובת יעד לא תקינה.');
-      }
+    // Feedback send via backend API instead of mailto
+    const APP_EMAIL = 'unique.center.yoni@gmail.com';
+    const fbBtn = document.getElementById('fbSendBtn');
+    const fbStatus = document.getElementById('fbStatus');
+    function setFbState(msg, color){
+      fbStatus.textContent = msg || '';
+      fbStatus.style.color = color || '';
+    }
+    fbBtn.addEventListener('click', async () => {
+      if(fbBtn.dataset.loading==='1') return; // prevent double
       const name = (document.getElementById('fbName').value||'').trim();
       const email = (document.getElementById('fbEmail').value||'').trim();
       const msg = (document.getElementById('fbMsg').value||'').trim();
-      if(!msg){ errors.push('נא להזין הודעה.'); }
-      if(email && !emailRe.test(email)){ errors.push('אימייל שגוי בשדה השולח.'); }
+      const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+      const errors = [];
+      if(!msg) errors.push('נא להזין הודעה.');
+      if(email && !emailRe.test(email)) errors.push('אימייל שגוי בשדה השולח.');
       if(errors.length){
-        statusEl.style.color = '#b91c1c';
-        statusEl.textContent = errors.join(' ');
+        setFbState(errors.join(' '), '#b91c1c');
         return;
       }
-      statusEl.style.color = '';
-      const subject = encodeURIComponent(`[Cyprus Crags] Feedback from ${name||'anonymous'}`);
-      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${msg}`);
-      const link = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
-      window.location.href = link;
-      document.getElementById('fbStatus').textContent = t().fb.thanks;
+      fbBtn.dataset.loading='1';
+      const originalText = fbBtn.textContent;
+      fbBtn.textContent = 'שולח...';
+      setFbState('', '');
+      try{
+        const res = await fetch('/api/feedback', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ name, email, message: msg })
+        });
+        const data = await res.json().catch(()=>({}));
+        if(!res.ok || !data.ok){
+          throw new Error(data.error || 'שגיאה בשליחה');
+        }
+        setFbState(t().fb.thanks, '#065f46');
+        fbBtn.textContent = 'נשלח';
+        setTimeout(()=>{ fbBtn.textContent = originalText; }, 3000);
+        document.getElementById('fbMsg').value='';
+      }catch(err){
+        console.error('feedback send failed', err);
+        setFbState(err.message || 'שליחה נכשלה', '#b91c1c');
+        fbBtn.textContent = originalText;
+      }finally{
+        fbBtn.dataset.loading='';
+      }
     });
 
     window.addEventListener('load', () => { setView('calc'); calc(); });
+    // Copy email on click (credit)
+    document.addEventListener('click', (e) => {
+      const el = e.target.closest('#creditEmail');
+      if(!el) return;
+      const email = el.getAttribute('data-email') || el.textContent.trim();
+      navigator.clipboard.writeText(email).then(()=>{
+        const prev = el.textContent;
+        el.textContent = 'Copied!';
+        setTimeout(()=>{ el.textContent = email; }, 1200);
+      });
+    });
   </script>
 </body>
 </html>
