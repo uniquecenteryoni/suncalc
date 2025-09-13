@@ -192,7 +192,7 @@
     </div>
 
     <div class="card foot">
-      <div class="credit" id="creditLine">Built for climbers in Cyprus 🇨🇾 · Credit: <b>Yehonatan Cohen</b> · <a id="creditEmail" href="mailto:unique.center.yoni@gmail.com">unique.center.yoni@gmail.com</a> · © 2025</div>
+  <div class="credit" id="creditLine">Built for climbers in Cyprus 🇨🇾 · Credit: <b>Yehonatan Cohen</b> · <a id="creditEmail" href="mailto:unique.center.yoni@gmail.com">unique.center.yoni@gmail.com</a> · © 2025</div>
     </div>
   </div>
 
@@ -436,7 +436,8 @@
       document.getElementById('label-date').textContent = tr.labels.date;
   navCalc.querySelector('.label').textContent = tr.nav.calc;
   navFeedback.querySelector('.label').textContent = tr.nav.feedback;
-      creditLine.innerHTML = `${tr.credit} · <a id="creditEmail" href="mailto:unique.center.yoni@gmail.com">unique.center.yoni@gmail.com</a> · © 2025`;
+  // Use centralized email constant
+  creditLine.innerHTML = `${tr.credit} · <a id="creditEmail" href="mailto:${APP_EMAIL}">${APP_EMAIL}</a> · © 2025`;
       document.getElementById('fb-title').textContent = tr.fb.title;
       document.getElementById('fb-label-name').textContent = tr.fb.name;
       document.getElementById('fb-label-email').textContent = tr.fb.email;
@@ -849,7 +850,8 @@
     }
 
     // Feedback send (email pulled dynamically from footer link)
-    document.getElementById('fbSendBtn').addEventListener('click', () => {
+  const APP_EMAIL = 'unique.center.yoni@gmail.com';
+  document.getElementById('fbSendBtn').addEventListener('click', () => {
       const creditLink = document.getElementById('creditEmail');
       let targetEmail = '';
       if(creditLink){
